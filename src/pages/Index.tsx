@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import PopularTripsSection from "../components/sections/PopularTripsSection";
 import MapSection from "../components/sections/MapSection";
 import FinanceSection from "../components/sections/FinanceSection";
-import PhotoSection from "../components/sections/PhotoSection";
+import PhotoGallery from "../components/sections/PhotoGallery";
 import Footer from "../components/sections/Footer";
 
 const Index = () => {
@@ -87,6 +86,9 @@ const Index = () => {
       
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
+        {/* Finance Tracking Section */}
+        <FinanceSection />
+        
         {/* Popular Trips Section */}
         <PopularTripsSection 
           trips={filteredTrips} 
@@ -96,11 +98,8 @@ const Index = () => {
         {/* Map View Section */}
         <MapSection />
         
-        {/* Finance Tracking Section */}
-        <FinanceSection />
-        
-        {/* Photo Album Section */}
-        <PhotoSection />
+        {/* Photo Gallery Section */}
+        <PhotoGallery />
         
         {/* Footer */}
         <Footer />

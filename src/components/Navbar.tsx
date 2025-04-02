@@ -1,9 +1,11 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Compass, Camera, CreditCard, BookOpen } from "lucide-react";
+import { MapPin, Compass, Camera, CreditCard, BookOpen, LogOut, User } from "lucide-react";
+import { useAuth } from '../contexts/AuthContext';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const { user, logout } = useAuth();
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4 py-3">
@@ -34,9 +36,29 @@ const Navbar = () => {
           </nav>
           
           <div className="flex items-center space-x-4">
-            <button className="px-5 py-2 bg-travel-primary text-white rounded-full shadow-md hover:bg-travel-dark transition-colors">
-              Sign In
-            </button>
+            {user ? (
+              <div className="flex items-center">
+                <div className="flex items-center">
+                  <User className="h-5 w-5 text-gray-500 mr-2" />
+                  <span className="text-sm text-gray-700">{user.displayName || user.email}</span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-travel-primary hover:bg-travel-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-travel-primary"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/login"
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-travel-primary hover:bg-travel-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-travel-primary"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Login
+              </a>
+            )}
           </div>
         </div>
       </div>
