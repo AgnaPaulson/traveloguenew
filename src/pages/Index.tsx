@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -7,7 +6,7 @@ import BudgetFilter from "../components/BudgetFilter";
 import MapView from "../components/MapView";
 import FinanceTracker from "../components/FinanceTracker";
 import PhotoAlbum from "../components/PhotoAlbum";
-import { Globe, Landmark, MapPin, CreditCard, Camera } from "lucide-react";
+import { Globe, Landmark, MapPin, CreditCard, Camera, Compass } from "lucide-react";
 
 const Index = () => {
   const [minBudget, setMinBudget] = useState<number>(0);
