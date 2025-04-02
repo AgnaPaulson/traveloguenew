@@ -2,6 +2,7 @@
 import React from "react";
 import MapView from "../MapView";
 import { Globe } from "lucide-react";
+import ReportGenerator from "../ReportGenerator";
 
 const MapSection: React.FC = () => {
   return (
@@ -15,6 +16,8 @@ const MapSection: React.FC = () => {
           Find amazing locations and nearby hotels
         </p>
       </div>
+      
+      <ReportGenerator />
       
       <MapView />
     </section>
