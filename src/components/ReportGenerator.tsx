@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Download, Clipboard, Printer, FilePlus2 } from "lucide-react";
+import { Download, Clipboard, Printer, FileBarChart } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -50,13 +50,16 @@ const ReportGenerator: React.FC<ReportGeneratorProps> = ({ className }) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline" className="gap-2">
-            <FilePlus2 className="h-4 w-4" />
+            <FileBarChart className="h-4 w-4 text-travel-primary" />
             Generate Report
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Generate Travel Report</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <FileBarChart className="h-5 w-5 text-travel-primary" />
+              Generate Travel Report
+            </DialogTitle>
             <DialogDescription>
               Create a detailed report of your travel data.
             </DialogDescription>
