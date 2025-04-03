@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { MapPin, Hotel, Navigation, Search, Coffee, Utensils, Camera, Beer, Mountain, Tent } from "lucide-react";
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from "@react-google-maps/api";
@@ -59,7 +58,6 @@ const MapView: React.FC = () => {
     placesServiceRef.current = new google.maps.places.PlacesService(map);
   }, []);
 
-  // Search for location and nearby places
   const handleSearch = () => {
     if (!searchQuery || !isLoaded) return;
     
@@ -75,7 +73,6 @@ const MapView: React.FC = () => {
         mapRef.current.panTo(newLocation);
         mapRef.current.setZoom(14);
         
-        // Search for cool places nearby
         findNearbyPlaces(newLocation);
         toast.success(`Found ${searchQuery}! Discovering nearby attractions...`);
       } else {
@@ -85,49 +82,66 @@ const MapView: React.FC = () => {
     });
   };
 
-  // Find nearby interesting places
   const findNearbyPlaces = (location: { lat: number; lng: number }) => {
     if (!placesServiceRef.current) {
       setIsLoading(false);
       return;
     }
 
-    const request = {
-      location: new google.maps.LatLng(location.lat, location.lng),
-      radius: 5000, // 5km radius
-      type: ['tourist_attraction', 'restaurant', 'park', 'museum', 'bar', 'lodging'],
-      rankBy: google.maps.places.RankBy.PROMINENCE,
+    const typesToSearch = ['tourist_attraction', 'restaurant', 'park', 'museum', 'bar', 'lodging'];
+    
+    const searchForType = (type: string, index: number) => {
+      const request = {
+        location: new google.maps.LatLng(location.lat, location.lng),
+        radius: 5000, // 5km radius
+        type: type,
+        rankBy: google.maps.places.RankBy.PROMINENCE,
+      };
+
+      placesServiceRef.current!.nearbySearch(
+        request as google.maps.places.PlaceSearchRequest,
+        (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            const newPlaces: Place[] = results.slice(0, 3).map(place => ({
+              id: place.place_id || Math.random().toString(),
+              name: place.name || 'Unknown Place',
+              position: { 
+                lat: place.geometry?.location?.lat() || 0, 
+                lng: place.geometry?.location?.lng() || 0 
+              },
+              rating: place.rating,
+              types: place.types as string[],
+              vicinity: place.vicinity,
+              icon: place.icon,
+            }));
+            
+            setNearbyPlaces(prevPlaces => {
+              const combinedPlaces = [...prevPlaces];
+              newPlaces.forEach(newPlace => {
+                if (!combinedPlaces.some(place => place.id === newPlace.id)) {
+                  combinedPlaces.push(newPlace);
+                }
+              });
+              return combinedPlaces;
+            });
+          }
+          
+          if (index === typesToSearch.length - 1) {
+            setIsLoading(false);
+          }
+        }
+      );
     };
 
-    placesServiceRef.current.nearbySearch(
-      request as google.maps.places.PlaceSearchRequest,
-      (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-          // Process and map the results
-          const places: Place[] = results.slice(0, 10).map(place => ({
-            id: place.place_id || Math.random().toString(),
-            name: place.name || 'Unknown Place',
-            position: { 
-              lat: place.geometry?.location?.lat() || 0, 
-              lng: place.geometry?.location?.lng() || 0 
-            },
-            rating: place.rating,
-            types: place.types as string[],
-            vicinity: place.vicinity,
-            icon: place.icon,
-          }));
-          
-          setNearbyPlaces(places);
-        } else {
-          setNearbyPlaces([]);
-          toast.info("No notable attractions found nearby.");
-        }
-        setIsLoading(false);
-      }
-    );
+    setNearbyPlaces([]);
+    
+    typesToSearch.forEach((type, index) => {
+      setTimeout(() => {
+        searchForType(type, index);
+      }, index * 300);
+    });
   };
 
-  // Get the icon for the place based on its type
   const getPlaceIcon = (place: Place) => {
     if (!place.types || place.types.length === 0) {
       return <MapPin className="h-4 w-4" />;
@@ -142,7 +156,6 @@ const MapView: React.FC = () => {
     return <MapPin className="h-4 w-4" />;
   };
 
-  // Handle enter key press for search
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
@@ -204,7 +217,6 @@ const MapView: React.FC = () => {
             ]
           }}
         >
-          {/* Current location marker */}
           <Marker
             position={currentLocation}
             icon={{
@@ -213,7 +225,6 @@ const MapView: React.FC = () => {
             }}
           />
 
-          {/* Nearby places markers */}
           {nearbyPlaces.map((place) => (
             <Marker
               key={place.id}
@@ -228,7 +239,6 @@ const MapView: React.FC = () => {
             />
           ))}
 
-          {/* Info window for selected place */}
           {selectedPlace && (
             <InfoWindow
               position={selectedPlace.position}
