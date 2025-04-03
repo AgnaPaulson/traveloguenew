@@ -1,4 +1,6 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { 
   User,
   UserCredential,
@@ -9,13 +11,33 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { auth, onAuthStateChanged, signInWithPopup, signOut, googleProvider } from '../config/firebase';
+=======
+import { User } from 'firebase/auth';
+import { 
+  auth, 
+  onAuthStateChanged, 
+  signInWithPopup, 
+  signOut, 
+  googleProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  isFirebaseConfigured
+} from '../config/firebase';
+import { toast } from "sonner";
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  firebaseConfigured: boolean;
   signInWithGoogle: () => Promise<void>;
+<<<<<<< HEAD
   signInWithEmail: (email: string, password: string) => Promise<UserCredential>;
   signUpWithEmail: (email: string, password: string, name: string) => Promise<void>;
+=======
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<void>;
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateUserProfile: (displayName?: string, photoURL?: string) => Promise<void>;
@@ -36,16 +58,25 @@ interface RateLimit {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [rateLimit, setRateLimit] = useState<RateLimit>({ attempts: 0, timestamp: 0 });
+=======
+  const firebaseConfigured = isFirebaseConfigured();
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
 
   useEffect(() => {
+    if (!firebaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [firebaseConfigured]);
 
   const checkRateLimit = () => {
     const now = Date.now();
@@ -67,25 +98,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGoogle = async () => {
+    if (!firebaseConfigured) {
+      toast.error("Firebase not configured. Please set your environment variables.");
+      return Promise.reject("Firebase not configured");
+    }
+
     try {
       checkRateLimit();
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+      toast.success("Successfully signed in!");
+    } catch (error: any) {
       console.error('Error signing in with Google:', error);
+<<<<<<< HEAD
+=======
+      toast.error(error.message || "Failed to sign in with Google");
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
   const signInWithEmail = async (email: string, password: string) => {
+<<<<<<< HEAD
     try {
       checkRateLimit();
       return await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error('Error signing in with email:', error);
+=======
+    if (!firebaseConfigured) {
+      toast.error("Firebase not configured. Please set your environment variables.");
+      return Promise.reject("Firebase not configured");
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Successfully signed in!");
+    } catch (error: any) {
+      console.error('Error signing in with email:', error);
+      toast.error(error.message || "Failed to sign in with email");
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
+<<<<<<< HEAD
   const signUpWithEmail = async (email: string, password: string, name: string) => {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
@@ -93,15 +149,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await sendEmailVerification(user);
     } catch (error) {
       console.error('Error signing up with email:', error);
+=======
+  const signUpWithEmail = async (email: string, password: string) => {
+    if (!firebaseConfigured) {
+      toast.error("Firebase not configured. Please set your environment variables.");
+      return Promise.reject("Firebase not configured");
+    }
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Account created successfully!");
+    } catch (error: any) {
+      console.error('Error signing up with email:', error);
+      toast.error(error.message || "Failed to create account");
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
   const logout = async () => {
+    if (!firebaseConfigured) {
+      toast.error("Firebase not configured. Please set your environment variables.");
+      return Promise.reject("Firebase not configured");
+    }
+
     try {
       await signOut(auth);
-    } catch (error) {
+      toast.success("Successfully signed out!");
+    } catch (error: any) {
       console.error('Error signing out:', error);
+<<<<<<< HEAD
+=======
+      toast.error(error.message || "Failed to sign out");
+>>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
@@ -129,6 +209,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value = {
     user,
     loading,
+    firebaseConfigured,
     signInWithGoogle,
     signInWithEmail,
     signUpWithEmail,
@@ -140,7 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
@@ -151,4 +232,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};
