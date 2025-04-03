@@ -2,16 +2,17 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, Mail, Lock, User as UserIcon, ArrowRight } from 'lucide-react';
+import { LogIn, Mail, Lock, User as UserIcon, ArrowRight, AlertCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Login: React.FC = () => {
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signUpWithEmail, firebaseConfigured } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   
@@ -75,6 +76,40 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (!firebaseConfigured) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-10">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              Firebase Configuration Missing
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Please set up your Firebase environment variables
+            </p>
+          </div>
+          
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Firebase Configuration Error</AlertTitle>
+            <AlertDescription>
+              <p className="mb-2">Your Firebase configuration is missing or incomplete. Please add the following environment variables to your .env file:</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li>VITE_FIREBASE_API_KEY</li>
+                <li>VITE_FIREBASE_AUTH_DOMAIN</li>
+                <li>VITE_FIREBASE_PROJECT_ID</li>
+                <li>VITE_FIREBASE_STORAGE_BUCKET</li>
+                <li>VITE_FIREBASE_MESSAGING_SENDER_ID</li>
+                <li>VITE_FIREBASE_APP_ID</li>
+              </ul>
+              <p className="mt-4 text-sm">You can find these values in your Firebase project settings.</p>
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
