@@ -10,6 +10,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotFound from "./pages/NotFound";
+import SignUp from './pages/SignUp';
+import ChatBotButton from './components/ChatBotButton';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,7 @@ const App: React.FC = () => {
               <Navbar />
               <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
                 <Route
                   path="/"
                   element={
@@ -36,6 +39,7 @@ const App: React.FC = () => {
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <ChatBotButton />
             </div>
           </Router>
         </TooltipProvider>

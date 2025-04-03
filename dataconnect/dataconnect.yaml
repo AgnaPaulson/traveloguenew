@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "journey-ai-atlas"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "journey-ai-atlas-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
