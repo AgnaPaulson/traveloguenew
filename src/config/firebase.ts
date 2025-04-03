@@ -13,9 +13,28 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
 };
 
+// Developer mode - for quick setup without environment variables
+// UNCOMMENT and FILL IN the values below to use Firebase without environment variables
+// ⚠️ Warning: Don't commit this file with actual values! For development only!
+
+/*
+const devModeConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+*/
+
+// Toggle developer mode by uncommenting the line below
+// const activeConfig = devModeConfig;
+const activeConfig = firebaseConfig;
+
 // Check if Firebase config is properly set
 const isFirebaseConfigured = () => {
-  return firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
+  return activeConfig.apiKey && activeConfig.apiKey !== "";
 };
 
 let app;
@@ -25,12 +44,12 @@ let googleProvider;
 try {
   if (isFirebaseConfigured()) {
     // Initialize Firebase only if config is available
-    app = initializeApp(firebaseConfig);
+    app = initializeApp(activeConfig);
     auth = getAuth(app);
     googleProvider = new GoogleAuthProvider();
   } else {
-    console.error("Firebase configuration is incomplete. Please set the environment variables.");
-    toast.error("Firebase configuration missing. Please set up your environment variables.");
+    console.error("Firebase configuration is incomplete. Please set up your configuration.");
+    toast.error("Firebase configuration missing. Set up environment variables or use developer mode.");
   }
 } catch (error) {
   console.error("Firebase initialization error:", error);
