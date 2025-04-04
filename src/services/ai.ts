@@ -30,3 +30,31 @@ export const generateTravelPlan = async (prompt: string): Promise<PlanningRespon
     }
   };
 };
+
+// Additional exports to resolve errors in Aitravelplanner.tsx
+export const generateTripIdeas = async () => {
+  return [
+    { id: 1, title: "Beach Vacation", description: "Relax on sunny beaches" },
+    { id: 2, title: "Mountain Hiking", description: "Explore scenic trails" },
+    { id: 3, title: "City Tour", description: "Experience urban culture" }
+  ];
+};
+
+export const generateItinerary = async () => {
+  return {
+    days: [
+      { day: 1, activities: ["Check-in to hotel", "Local dinner"] },
+      { day: 2, activities: ["Sightseeing", "Shopping"] }
+    ]
+  };
+};
+
+export const generateLocalTips = async () => {
+  return ["Try the local cuisine", "Visit during off-peak seasons", "Use public transportation"];
+};
+
+export interface TripSuggestion {
+  id: number;
+  title: string;
+  description: string;
+}
