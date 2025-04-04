@@ -1,6 +1,7 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, Loader2, X } from 'lucide-react';
-import { sendChatMessage, generateTravelResponse, ChatMessage } from '../services/chatService';
+import { sendChatMessage, ChatMessage } from '../services/chatService';
 
 interface ChatBotProps {
   isOpen: boolean;
@@ -133,4 +134,4 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default ChatBot; 
+export default ChatBot;
