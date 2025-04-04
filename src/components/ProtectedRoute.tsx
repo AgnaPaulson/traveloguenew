@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -8,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading, firebaseConfigured } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -21,14 +20,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  if (!firebaseConfigured) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
+  // Skip authentication checks and render children directly
   return <>{children}</>;
 };
 

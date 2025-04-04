@@ -31,16 +31,50 @@ export const generateTravelPlan = async (prompt: string): Promise<PlanningRespon
   };
 };
 
-// Additional exports to resolve errors in Aitravelplanner.tsx
-export const generateTripIdeas = async () => {
+export interface TripSuggestion {
+  id: number;
+  title: string;
+  description: string;
+  destination?: string;
+  budget?: string;
+  duration?: string;
+  activities?: string[];
+}
+
+// Correctly typed placeholder implementations to match Aitravelplanner usage
+export const generateTripIdeas = async (): Promise<TripSuggestion[]> => {
   return [
-    { id: 1, title: "Beach Vacation", description: "Relax on sunny beaches" },
-    { id: 2, title: "Mountain Hiking", description: "Explore scenic trails" },
-    { id: 3, title: "City Tour", description: "Experience urban culture" }
+    { 
+      id: 1, 
+      title: "Beach Vacation", 
+      description: "Relax on sunny beaches",
+      destination: "Maldives",
+      budget: "$2000-$3000",
+      duration: "7 days",
+      activities: ["Swimming", "Snorkeling", "Beach relaxation"]
+    },
+    { 
+      id: 2, 
+      title: "Mountain Hiking", 
+      description: "Explore scenic trails",
+      destination: "Swiss Alps",
+      budget: "$1500-$2500",
+      duration: "5 days",
+      activities: ["Hiking", "Photography", "Camping"]
+    },
+    { 
+      id: 3, 
+      title: "City Tour", 
+      description: "Experience urban culture",
+      destination: "Paris",
+      budget: "$1800-$2800",
+      duration: "6 days",
+      activities: ["Museum visits", "Fine dining", "Shopping"]
+    }
   ];
 };
 
-export const generateItinerary = async () => {
+export const generateItinerary = async (destination: string, budget: string, duration: string) => {
   return {
     days: [
       { day: 1, activities: ["Check-in to hotel", "Local dinner"] },
@@ -49,12 +83,6 @@ export const generateItinerary = async () => {
   };
 };
 
-export const generateLocalTips = async () => {
+export const generateLocalTips = async (destination: string) => {
   return ["Try the local cuisine", "Visit during off-peak seasons", "Use public transportation"];
 };
-
-export interface TripSuggestion {
-  id: number;
-  title: string;
-  description: string;
-}
