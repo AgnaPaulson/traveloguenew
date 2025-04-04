@@ -1,18 +1,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { 
   User,
-  UserCredential,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  sendEmailVerification,
-  updateProfile
+  UserCredential
 } from 'firebase/auth';
-import { auth, onAuthStateChanged, signInWithPopup, signOut, googleProvider } from '../config/firebase';
-=======
-import { User } from 'firebase/auth';
 import { 
   auth, 
   onAuthStateChanged, 
@@ -21,23 +12,20 @@ import {
   googleProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  updateProfile,
   isFirebaseConfigured
 } from '../config/firebase';
 import { toast } from "sonner";
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   firebaseConfigured: boolean;
   signInWithGoogle: () => Promise<void>;
-<<<<<<< HEAD
   signInWithEmail: (email: string, password: string) => Promise<UserCredential>;
   signUpWithEmail: (email: string, password: string, name: string) => Promise<void>;
-=======
-  signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string) => Promise<void>;
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateUserProfile: (displayName?: string, photoURL?: string) => Promise<void>;
@@ -58,11 +46,8 @@ interface RateLimit {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
   const [rateLimit, setRateLimit] = useState<RateLimit>({ attempts: 0, timestamp: 0 });
-=======
   const firebaseConfigured = isFirebaseConfigured();
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
 
   useEffect(() => {
     if (!firebaseConfigured) {
@@ -109,60 +94,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Successfully signed in!");
     } catch (error: any) {
       console.error('Error signing in with Google:', error);
-<<<<<<< HEAD
-=======
       toast.error(error.message || "Failed to sign in with Google");
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
   const signInWithEmail = async (email: string, password: string) => {
-<<<<<<< HEAD
-    try {
-      checkRateLimit();
-      return await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      console.error('Error signing in with email:', error);
-=======
     if (!firebaseConfigured) {
       toast.error("Firebase not configured. Please set your environment variables.");
       return Promise.reject("Firebase not configured");
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      checkRateLimit();
+      const result = await signInWithEmailAndPassword(auth, email, password);
       toast.success("Successfully signed in!");
+      return result;
     } catch (error: any) {
       console.error('Error signing in with email:', error);
       toast.error(error.message || "Failed to sign in with email");
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
-<<<<<<< HEAD
   const signUpWithEmail = async (email: string, password: string, name: string) => {
-    try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, { displayName: name });
-      await sendEmailVerification(user);
-    } catch (error) {
-      console.error('Error signing up with email:', error);
-=======
-  const signUpWithEmail = async (email: string, password: string) => {
     if (!firebaseConfigured) {
       toast.error("Firebase not configured. Please set your environment variables.");
       return Promise.reject("Firebase not configured");
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      toast.success("Account created successfully!");
+      checkRateLimit();
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(user, { displayName: name });
+      await sendEmailVerification(user);
+      toast.success("Account created successfully! Please check your email for verification.");
     } catch (error: any) {
       console.error('Error signing up with email:', error);
       toast.error(error.message || "Failed to create account");
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
@@ -178,32 +147,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Successfully signed out!");
     } catch (error: any) {
       console.error('Error signing out:', error);
-<<<<<<< HEAD
-=======
       toast.error(error.message || "Failed to sign out");
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
       throw error;
     }
   };
 
   const resetPassword = async (email: string) => {
+    if (!firebaseConfigured) {
+      toast.error("Firebase not configured. Please set your environment variables.");
+      return Promise.reject("Firebase not configured");
+    }
+
     try {
       checkRateLimit();
       await sendPasswordResetEmail(auth, email);
-    } catch (error) {
+      toast.success("Password reset email sent. Please check your inbox.");
+    } catch (error: any) {
       console.error('Error resetting password:', error);
+      toast.error(error.message || "Failed to send password reset email");
       throw error;
     }
   };
 
   const updateUserProfile = async (displayName?: string, photoURL?: string) => {
     if (!auth.currentUser) throw new Error('No user logged in');
-    await updateProfile(auth.currentUser, { displayName, photoURL });
+    try {
+      await updateProfile(auth.currentUser, { displayName, photoURL });
+      toast.success("Profile updated successfully!");
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast.error(error.message || "Failed to update profile");
+      throw error;
+    }
   };
 
   const verifyEmail = async () => {
     if (!auth.currentUser) throw new Error('No user logged in');
-    await sendEmailVerification(auth.currentUser);
+    try {
+      await sendEmailVerification(auth.currentUser);
+      toast.success("Verification email sent. Please check your inbox.");
+    } catch (error: any) {
+      console.error('Error sending verification email:', error);
+      toast.error(error.message || "Failed to send verification email");
+      throw error;
+    }
   };
 
   const value = {

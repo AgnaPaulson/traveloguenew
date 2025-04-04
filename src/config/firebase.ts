@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { initializeApp } from 'firebase/app';
 import { 
   getAuth, 
@@ -16,23 +16,10 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
-=======
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
-
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, User } from 'firebase/auth';
 import { toast } from "sonner";
 
 // Firebase configuration object
 const firebaseConfig = {
-<<<<<<< HEAD
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
-=======
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
@@ -53,43 +40,29 @@ const devModeConfig = {
   storageBucket: "YOUR_STORAGE_BUCKET",
   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
   appId: "YOUR_APP_ID"
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
 };
 */
 
-<<<<<<< HEAD
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const storage = getStorage(app);
-const googleProvider = new GoogleAuthProvider();
-
-// Set persistence to LOCAL
-setPersistence(auth, browserLocalPersistence);
-
-export { 
-  auth, 
-  storage, 
-=======
-// Toggle developer mode by uncommenting the line below
-// const activeConfig = devModeConfig;
-const activeConfig = firebaseConfig;
-
 // Check if Firebase config is properly set
 const isFirebaseConfigured = () => {
-  return activeConfig.apiKey && activeConfig.apiKey !== "";
+  return firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
 };
 
 let app;
 let auth;
+let storage;
 let googleProvider;
 
 try {
   if (isFirebaseConfigured()) {
     // Initialize Firebase only if config is available
-    app = initializeApp(activeConfig);
+    app = initializeApp(firebaseConfig);
     auth = getAuth(app);
+    storage = getStorage(app);
     googleProvider = new GoogleAuthProvider();
+    
+    // Set persistence to LOCAL
+    setPersistence(auth, browserLocalPersistence);
   } else {
     console.error("Firebase configuration is incomplete. Please set up your configuration.");
     toast.error("Firebase configuration missing. Set up environment variables or use developer mode.");
@@ -101,21 +74,16 @@ try {
 
 export { 
   auth, 
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
+  storage,
   googleProvider, 
   signInWithPopup, 
   signOut, 
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-<<<<<<< HEAD
   sendPasswordResetEmail,
   sendEmailVerification,
-  updateProfile
-};
-export type { User }; 
-=======
+  updateProfile,
   isFirebaseConfigured
 };
 export type { User };
->>>>>>> a82bc0ebdc254222bb070b68646209c48572eff2
