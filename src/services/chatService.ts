@@ -14,6 +14,23 @@ export interface TravelQuery {
   budget?: string;
 }
 
+export interface TripSuggestion {
+  destination: string;
+  summary: string;
+  days: {
+    day: number;
+    activities: string[];
+  }[];
+  budget: {
+    accommodation: number;
+    food: number;
+    activities: number;
+    transport: number;
+    total: number;
+  };
+  images?: string[];
+}
+
 // This is a fallback implementation that doesn't require an API key
 export const sendChatMessage = async (message: string): Promise<string> => {
   try {
@@ -27,6 +44,61 @@ export const sendChatMessage = async (message: string): Promise<string> => {
   } catch (error: any) {
     console.error('Error sending chat message:', error);
     toast.error(error.message || 'Failed to send message');
+    throw error;
+  }
+};
+
+// Export a mock function for trip planning that returns a TripSuggestion
+export const generateTripPlan = async (query: TravelQuery): Promise<TripSuggestion> => {
+  try {
+    console.log('Generating trip plan for:', query);
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Return a mock trip suggestion
+    const destination = query.destination || "Paris";
+    
+    return {
+      destination: destination,
+      summary: `${destination} is a beautiful destination with plenty to see and do. It offers cultural attractions, amazing food, and beautiful landscapes.`,
+      days: [
+        {
+          day: 1,
+          activities: [
+            `Explore the main attractions in ${destination}`,
+            "Visit local museums and historical sites",
+            "Enjoy a welcome dinner at a local restaurant"
+          ]
+        },
+        {
+          day: 2,
+          activities: [
+            "Take a guided tour of the city",
+            "Shop at local markets",
+            "Experience the nightlife"
+          ]
+        },
+        {
+          day: 3,
+          activities: [
+            "Day trip to nearby natural attractions",
+            "Relax at a park or beach",
+            "Try local cuisine at a highly-rated restaurant"
+          ]
+        }
+      ],
+      budget: {
+        accommodation: 500,
+        food: 300,
+        activities: 200,
+        transport: 150,
+        total: 1150
+      }
+    };
+  } catch (error: any) {
+    console.error('Error generating trip plan:', error);
+    toast.error(error.message || 'Failed to generate trip plan');
     throw error;
   }
 };

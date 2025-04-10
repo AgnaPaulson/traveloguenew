@@ -41,11 +41,16 @@ const devModeConfig = {
   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
   appId: "YOUR_APP_ID"
 };
+
+// Use this instead of firebaseConfig for quick development
+// const activeConfig = devModeConfig;
 */
+
+const activeConfig = firebaseConfig;
 
 // Check if Firebase config is properly set
 const isFirebaseConfigured = () => {
-  return firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
+  return activeConfig.apiKey && activeConfig.apiKey !== "";
 };
 
 let app;
@@ -56,7 +61,7 @@ let googleProvider;
 try {
   if (isFirebaseConfigured()) {
     // Initialize Firebase only if config is available
-    app = initializeApp(firebaseConfig);
+    app = initializeApp(activeConfig);
     auth = getAuth(app);
     storage = getStorage(app);
     googleProvider = new GoogleAuthProvider();
