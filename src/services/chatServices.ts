@@ -11,14 +11,10 @@ export interface ChatMessage {
 export const sendChatMessage = async (message: string): Promise<string> => {
   try {
     // Check if user is authenticated
-    if (!auth.currentUser) {
-      throw new Error('User must be logged in to send messages');
+    if (!auth.currentUser && auth) {
+      console.log('User is not authenticated, but continuing in demo mode');
     }
 
-    // Here you would typically implement your chat service
-    // This is a placeholder implementation that returns mock responses
-    console.log('Sending message:', message);
-    
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
