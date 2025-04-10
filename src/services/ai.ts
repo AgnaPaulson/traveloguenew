@@ -1,5 +1,7 @@
 
-// Placeholder file to resolve import errors in Aitravelplanner component
+// Import the TripSuggestion type from tripTypes
+import { TripSuggestion, generateMockTrip } from '../types/tripTypes';
+
 export interface TravelPlan {
   destination: string;
   duration: string;
@@ -13,6 +15,13 @@ export interface PlanningResponse {
   plan?: TravelPlan;
   error?: string;
   loading?: boolean;
+}
+
+export interface TravelPreferences {
+  budget: number;
+  duration: number;
+  interests: string[];
+  climate: string;
 }
 
 export const generateTravelPlan = async (prompt: string): Promise<PlanningResponse> => {
@@ -31,58 +40,37 @@ export const generateTravelPlan = async (prompt: string): Promise<PlanningRespon
   };
 };
 
-export interface TripSuggestion {
-  id: number;
-  title: string;
-  description: string;
-  destination?: string;
-  budget?: string;
-  duration?: string;
-  activities?: string[];
-}
-
-// Correctly typed placeholder implementations to match Aitravelplanner usage
-export const generateTripIdeas = async (): Promise<TripSuggestion[]> => {
-  return [
-    { 
-      id: 1, 
-      title: "Beach Vacation", 
-      description: "Relax on sunny beaches",
-      destination: "Maldives",
-      budget: "$2000-$3000",
-      duration: "7 days",
-      activities: ["Swimming", "Snorkeling", "Beach relaxation"]
-    },
-    { 
-      id: 2, 
-      title: "Mountain Hiking", 
-      description: "Explore scenic trails",
-      destination: "Swiss Alps",
-      budget: "$1500-$2500",
-      duration: "5 days",
-      activities: ["Hiking", "Photography", "Camping"]
-    },
-    { 
-      id: 3, 
-      title: "City Tour", 
-      description: "Experience urban culture",
-      destination: "Paris",
-      budget: "$1800-$2800",
-      duration: "6 days",
-      activities: ["Museum visits", "Fine dining", "Shopping"]
-    }
-  ];
+// Updated to match the expected function signature in AITravelPlanner
+export const generateTripIdeas = async (preferences: TravelPreferences): Promise<TripSuggestion> => {
+  console.log("Generating trip ideas based on preferences:", preferences);
+  // Use the mock trip generator from tripTypes
+  return generateMockTrip(`Trip to with budget ${preferences.budget} for ${preferences.duration} days`);
 };
 
-export const generateItinerary = async (destination: string, budget: string, duration: string) => {
-  return {
-    days: [
-      { day: 1, activities: ["Check-in to hotel", "Local dinner"] },
-      { day: 2, activities: ["Sightseeing", "Shopping"] }
-    ]
-  };
+// Updated to match the expected function signature
+export const generateItinerary = async (destination: string, duration: number, interests: string[]): Promise<string> => {
+  console.log(`Generating itinerary for ${destination} for ${duration} days with interests:`, interests);
+  
+  let itinerary = `# ${duration}-Day Itinerary for ${destination}\n\n`;
+  
+  for (let i = 1; i <= duration; i++) {
+    itinerary += `## Day ${i}\n`;
+    itinerary += `- Morning: Explore local ${interests[0] || 'attractions'}\n`;
+    itinerary += `- Afternoon: Visit popular ${interests[1] || 'landmarks'}\n`;
+    itinerary += `- Evening: Experience local ${interests[2] || 'cuisine'}\n\n`;
+  }
+  
+  return itinerary;
 };
 
-export const generateLocalTips = async (destination: string) => {
-  return ["Try the local cuisine", "Visit during off-peak seasons", "Use public transportation"];
+// Updated to match the expected function signature
+export const generateLocalTips = async (destination: string): Promise<string> => {
+  console.log(`Generating local tips for ${destination}`);
+  
+  return `# Local Tips for ${destination}\n\n` +
+    `- Try the local cuisine, especially the regional specialties\n` +
+    `- Visit during off-peak seasons to avoid crowds\n` +
+    `- Use public transportation to get around efficiently\n` +
+    `- Learn a few basic phrases in the local language\n` +
+    `- Ask locals for restaurant recommendations instead of following tourist guides`;
 };

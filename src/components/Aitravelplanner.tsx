@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Sparkles, Loader2, MapPin, Calendar, DollarSign } from 'lucide-react';
-import { generateTripIdeas, generateItinerary, generateLocalTips } from '../services/ai';
-import type { TripSuggestion } from '../services/ai';
+import { generateTripIdeas, generateItinerary, generateLocalTips, TravelPreferences } from '../services/ai';
+import { TripSuggestion } from '../types/tripTypes';
 
 const AITravelPlanner: React.FC = () => {
-  const [preferences, setPreferences] = useState({
+  const [preferences, setPreferences] = useState<TravelPreferences>({
     budget: 2000,
     duration: 7,
     interests: [] as string[],
@@ -212,16 +213,34 @@ const AITravelPlanner: React.FC = () => {
               </div>
 
               <div className="mb-6">
-                <h4 className="font-medium mb-2">Recommended Activities</h4>
+                <h4 className="font-medium mb-2">Highlights</h4>
                 <ul className="space-y-2">
-                  {suggestion.activities.map((activity, index) => (
+                  {suggestion.highlights.map((highlight, index) => (
                     <li key={index} className="flex items-start">
                       <span className="flex-shrink-0 h-5 w-5 text-travel-primary">•</span>
-                      <span className="ml-2">{activity}</span>
+                      <span className="ml-2">{highlight}</span>
                     </li>
                   ))}
                 </ul>
               </div>
+              
+              {suggestion.days && suggestion.days.length > 0 && (
+                <div>
+                  <h4 className="font-medium mb-2">Daily Itinerary</h4>
+                  <div className="space-y-4">
+                    {suggestion.days.map((day) => (
+                      <div key={day.day} className="bg-gray-50 p-4 rounded-lg">
+                        <p className="font-semibold mb-2">Day {day.day}</p>
+                        <ul className="space-y-1">
+                          {day.activities.map((activity, idx) => (
+                            <li key={idx} className="text-sm text-gray-600">• {activity}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
