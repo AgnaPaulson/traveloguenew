@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, firebaseConfigured } = useAuth();
 
   if (loading) {
     return (
@@ -19,6 +19,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         </div>
       </div>
     );
+  }
+
+  // If Firebase is not configured, allow access but user will see configuration message
+  if (!firebaseConfigured) {
+    console.log("Firebase not configured, but allowing access in demo mode");
+    return <>{children}</>;
   }
 
   // Redirect to login if user is not authenticated
