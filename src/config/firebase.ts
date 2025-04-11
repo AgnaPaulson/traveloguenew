@@ -36,7 +36,7 @@ const devModeConfig = {
   projectId: "traveloguenew", // Your Project ID
   storageBucket: "traveloguenew.appspot.com", // Based on your project ID
   messagingSenderId: "455998755261", // Your Project number
-  appId: "1:455998755261:web:YOUR_WEB_APP_ID" // You'll need to get this from Firebase console
+  appId: "1:455998755261:web:1234567890abcdef" // Replace this with your actual Web App ID
 };
 
 // Use devModeConfig instead of firebaseConfig for quick development
@@ -61,7 +61,13 @@ try {
     googleProvider = new GoogleAuthProvider();
     
     // Set persistence to LOCAL
-    setPersistence(auth, browserLocalPersistence);
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        console.log("Firebase persistence set to LOCAL");
+      })
+      .catch((error) => {
+        console.error("Error setting persistence:", error);
+      });
   } else {
     console.error("Firebase configuration is incomplete. Please set up your configuration.");
     toast.error("Firebase configuration missing. Set up environment variables or use developer mode.");
