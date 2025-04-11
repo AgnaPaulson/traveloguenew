@@ -28,15 +28,15 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
 };
 
-// Developer mode - for quick setup without environment variables
-// Using your actual Firebase project details
+// Developer mode - using your actual Firebase project details
+// This configuration is being used for development
 const devModeConfig = {
   apiKey: "AIzaSyBdrumk2qfu68BOU8XQqKef2cBOYhEzL7U", // Your Web API key
   authDomain: "traveloguenew.firebaseapp.com", // Based on your project ID
   projectId: "traveloguenew", // Your Project ID
   storageBucket: "traveloguenew.appspot.com", // Based on your project ID
   messagingSenderId: "455998755261", // Your Project number
-  appId: "1:455998755261:web:1234567890abcdef" // Replace this with your actual Web App ID
+  appId: "1:455998755261:web:1234567890abcdef" // NOTE: Replace with your actual Web App ID from Firebase Console
 };
 
 // Use devModeConfig instead of firebaseConfig for quick development
@@ -67,6 +67,7 @@ try {
       })
       .catch((error) => {
         console.error("Error setting persistence:", error);
+        toast.error("Error setting authentication persistence. You may need to log in again when refreshing.");
       });
   } else {
     console.error("Firebase configuration is incomplete. Please set up your configuration.");
