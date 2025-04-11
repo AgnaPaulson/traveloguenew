@@ -29,24 +29,20 @@ const firebaseConfig = {
 };
 
 // Developer mode - for quick setup without environment variables
-// UNCOMMENT and FILL IN the values below to use Firebase without environment variables
+// Uncomment and fill in the values below to use Firebase without environment variables
 // ⚠️ Warning: Don't commit this file with actual values! For development only!
 
-/*
 const devModeConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // Replace with your API key
+  authDomain: "your-project-id.firebaseapp.com", // Replace with your auth domain
+  projectId: "your-project-id", // Replace with your project ID
+  storageBucket: "your-project-id.appspot.com", // Replace with your storage bucket
+  messagingSenderId: "123456789012", // Replace with your messaging sender ID
+  appId: "1:123456789012:web:abcdef1234567890" // Replace with your app ID
 };
 
-// Use this instead of firebaseConfig for quick development
-// const activeConfig = devModeConfig;
-*/
-
-const activeConfig = firebaseConfig;
+// Use devModeConfig instead of firebaseConfig for quick development
+const activeConfig = devModeConfig;
 
 // Check if Firebase config is properly set
 const isFirebaseConfigured = () => {
