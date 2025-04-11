@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
@@ -25,20 +26,55 @@ const App: React.FC = () => {
           <Router>
             <div className="min-h-screen bg-gray-50">
               <Navbar />
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Index />
-                    </ProtectedRoute>
-                  }
-                />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="pt-16"> {/* Added padding to account for fixed navbar */}
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Index />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* Placeholder routes for navigation - will redirect to NotFound until implemented */}
+                  <Route
+                    path="/trips"
+                    element={
+                      <ProtectedRoute>
+                        <NotFound />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/map"
+                    element={
+                      <ProtectedRoute>
+                        <NotFound />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/finances"
+                    element={
+                      <ProtectedRoute>
+                        <NotFound />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/album"
+                    element={
+                      <ProtectedRoute>
+                        <NotFound />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
               <ChatBotButton />
             </div>
           </Router>

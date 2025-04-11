@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import PopularTripsSection from "../components/sections/PopularTripsSection";
 import MapSection from "../components/sections/MapSection";
@@ -79,8 +79,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
       {/* Hero Section */}
       <HeroSection />
       
