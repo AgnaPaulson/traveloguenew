@@ -82,6 +82,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
   };
 
+  // Helper function to provide user-friendly error messages
+  const getAuthErrorMessage = (error: any): string => {
+    const errorCode = error?.code;
+    
+    switch (errorCode) {
+      case 'auth/invalid-credential':
+        return "Invalid email or password. Please check your credentials and try again.";
+      case 'auth/user-not-found':
+        return "No account found with this email address. Please sign up first.";
+      case 'auth/wrong-password':
+        return "Incorrect password. Please try again or use the 'Forgot password' option.";
+      case 'auth/email-already-in-use':
+        return "This email is already registered. Please sign in instead or use a different email.";
+      case 'auth/weak-password':
+        return "Password is too weak. Please use a stronger password with at least 6 characters.";
+      case 'auth/invalid-email':
+        return "Invalid email format. Please enter a valid email address.";
+      case 'auth/too-many-requests':
+        return "Too many failed login attempts. Please try again later or reset your password.";
+      default:
+        return error?.message || "An error occurred during authentication. Please try again.";
+    }
+  };
+
   const signInWithGoogle = async () => {
     if (!firebaseConfigured) {
       toast.error("Firebase not configured. Please set your environment variables.");
@@ -94,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Successfully signed in!");
     } catch (error: any) {
       console.error('Error signing in with Google:', error);
-      toast.error(error.message || "Failed to sign in with Google");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -112,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return result;
     } catch (error: any) {
       console.error('Error signing in with email:', error);
-      toast.error(error.message || "Failed to sign in with email");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -126,12 +150,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       checkRateLimit();
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, { displayName: name });
+      if (name) {
+        await updateProfile(user, { displayName: name });
+      }
       await sendEmailVerification(user);
       toast.success("Account created successfully! Please check your email for verification.");
     } catch (error: any) {
       console.error('Error signing up with email:', error);
-      toast.error(error.message || "Failed to create account");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -147,7 +173,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Successfully signed out!");
     } catch (error: any) {
       console.error('Error signing out:', error);
-      toast.error(error.message || "Failed to sign out");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -164,7 +190,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Password reset email sent. Please check your inbox.");
     } catch (error: any) {
       console.error('Error resetting password:', error);
-      toast.error(error.message || "Failed to send password reset email");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -176,7 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Profile updated successfully!");
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      toast.error(error.message || "Failed to update profile");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };
@@ -188,7 +214,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success("Verification email sent. Please check your inbox.");
     } catch (error: any) {
       console.error('Error sending verification email:', error);
-      toast.error(error.message || "Failed to send verification email");
+      toast.error(getAuthErrorMessage(error));
       throw error;
     }
   };

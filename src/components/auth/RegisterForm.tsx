@@ -21,6 +21,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
 
   const handleGoogleSignIn = async () => {
     try {
@@ -52,7 +53,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
     try {
       setIsLoading(true);
       setError(null);
-      await signUpWithEmail(registerEmail, registerPassword, '');
+      await signUpWithEmail(registerEmail, registerPassword, displayName);
       navigate('/');
     } catch (error: any) {
       setError(error.message || 'Failed to create account');
@@ -80,6 +81,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleEmailSignUp} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="display-name">Display Name (Optional)</Label>
+              <div className="relative">
+                <UserIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input 
+                  id="display-name" 
+                  type="text" 
+                  placeholder="Your name" 
+                  className="pl-10" 
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
+              </div>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="register-email">Email</Label>
               <div className="relative">
