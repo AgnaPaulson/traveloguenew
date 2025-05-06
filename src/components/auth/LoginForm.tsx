@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
+import AdPanel from '../ads/AdPanel';
 
 interface LoginFormProps {
   navigate: NavigateFunction;
@@ -59,6 +60,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigate }) => {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      {/* Ad Panel positioned above the login form */}
+      <AdPanel />
 
       <Card>
         <CardHeader>
