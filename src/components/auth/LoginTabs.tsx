@@ -8,9 +8,10 @@ import RegisterForm from './RegisterForm';
 
 interface LoginTabsProps {
   navigate: NavigateFunction;
+  showAdPanel?: boolean;
 }
 
-const LoginTabs: React.FC<LoginTabsProps> = ({ navigate }) => {
+const LoginTabs: React.FC<LoginTabsProps> = ({ navigate, showAdPanel = true }) => {
   const { firebaseConfigured } = useAuth();
   
   return (
@@ -21,7 +22,7 @@ const LoginTabs: React.FC<LoginTabsProps> = ({ navigate }) => {
       </TabsList>
       
       <TabsContent value="login">
-        <LoginForm navigate={navigate} />
+        <LoginForm navigate={navigate} showAdPanel={showAdPanel} />
       </TabsContent>
       
       <TabsContent value="register">

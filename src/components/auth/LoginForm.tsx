@@ -10,12 +10,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import AdPanel from '../ads/AdPanel';
+import { useLoginModal } from '@/contexts/LoginModalContext';
 
 interface LoginFormProps {
   navigate: NavigateFunction;
+  showAdPanel?: boolean;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ navigate }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ navigate, showAdPanel = true }) => {
+  const { closeLoginModal } = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loginEmail, setLoginEmail] = useState('');
@@ -40,6 +43,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigate }) => {
       // Check against dummy credentials
       if (loginEmail === DUMMY_EMAIL && loginPassword === DUMMY_PASSWORD) {
         toast.success("Successfully logged in!");
+        closeLoginModal();
         navigate('/');
       } else {
         throw new Error('Invalid credentials');
@@ -62,7 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigate }) => {
       )}
 
       {/* Ad Panel positioned above the login form */}
-      <AdPanel />
+      {showAdPanel && <AdPanel />}
 
       <Card>
         <CardHeader>

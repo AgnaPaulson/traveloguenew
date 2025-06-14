@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLoginModal } from '@/contexts/LoginModalContext';
 import { LogIn, Mail, Lock, User as UserIcon, AlertCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +17,7 @@ interface RegisterFormProps {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
   const { signInWithGoogle, signUpWithEmail } = useAuth();
+  const { closeLoginModal } = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [registerEmail, setRegisterEmail] = useState('');
@@ -28,6 +30,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
       setIsLoading(true);
       setError(null);
       await signInWithGoogle();
+      closeLoginModal();
       navigate('/');
     } catch (error: any) {
       setError(error.message || 'Failed to sign in with Google');
@@ -54,6 +57,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ navigate }) => {
       setIsLoading(true);
       setError(null);
       await signUpWithEmail(registerEmail, registerPassword, displayName);
+      closeLoginModal();
       navigate('/');
     } catch (error: any) {
       setError(error.message || 'Failed to create account');

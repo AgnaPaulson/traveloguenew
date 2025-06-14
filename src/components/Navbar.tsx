@@ -13,9 +13,11 @@ import {
   X 
 } from "lucide-react";
 import { useAuth } from '../contexts/AuthContext';
+import { useLoginModal } from '../contexts/LoginModalContext';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
+  const { openLoginModal } = useLoginModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -38,18 +40,49 @@ const Navbar: React.FC = () => {
             <Link to="/" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
               Home
             </Link>
-            <Link to="/trips" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
-              Trip Plans
-            </Link>
-            <Link to="/map" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
-              Explore
-            </Link>
-            <Link to="/finances" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
-              Finance
-            </Link>
-            <Link to="/album" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
-              Photos
-            </Link>
+            {user ? (
+              <>
+                <Link to="/trips" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
+                  Trip Plans
+                </Link>
+                <Link to="/map" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
+                  Explore
+                </Link>
+                <Link to="/finances" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
+                  Finance
+                </Link>
+                <Link to="/album" className="text-travel-secondary hover:text-travel-primary transition-colors font-medium">
+                  Photos
+                </Link>
+              </>
+            ) : (
+              <>
+                <button 
+                  onClick={openLoginModal}
+                  className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                >
+                  Trip Plans
+                </button>
+                <button 
+                  onClick={openLoginModal}
+                  className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                >
+                  Explore
+                </button>
+                <button 
+                  onClick={openLoginModal}
+                  className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                >
+                  Finance
+                </button>
+                <button 
+                  onClick={openLoginModal}
+                  className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                >
+                  Photos
+                </button>
+              </>
+            )}
           </nav>
           
           {/* Mobile Menu Button */}
@@ -100,34 +133,77 @@ const Navbar: React.FC = () => {
               >
                 Home
               </Link>
-              <Link 
-                to="/trips" 
-                className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Trip Plans
-              </Link>
-              <Link 
-                to="/map" 
-                className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Explore
-              </Link>
-              <Link 
-                to="/finances" 
-                className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Finance
-              </Link>
-              <Link 
-                to="/album" 
-                className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Photos
-              </Link>
+              {user ? (
+                <>
+                  <Link 
+                    to="/trips" 
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Trip Plans
+                  </Link>
+                  <Link 
+                    to="/map" 
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Explore
+                  </Link>
+                  <Link 
+                    to="/finances" 
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Finance
+                  </Link>
+                  <Link 
+                    to="/album" 
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Photos
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <button 
+                    onClick={() => {
+                      openLoginModal();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium text-left"
+                  >
+                    Trip Plans
+                  </button>
+                  <button 
+                    onClick={() => {
+                      openLoginModal();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium text-left"
+                  >
+                    Explore
+                  </button>
+                  <button 
+                    onClick={() => {
+                      openLoginModal();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium text-left"
+                  >
+                    Finance
+                  </button>
+                  <button 
+                    onClick={() => {
+                      openLoginModal();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-travel-secondary hover:text-travel-primary transition-colors font-medium text-left"
+                  >
+                    Photos
+                  </button>
+                </>
+              )}
               
               {/* Mobile login/profile section */}
               {user ? (
