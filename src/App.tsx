@@ -7,6 +7,10 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Index from './pages/Index';
 import Login from './pages/Login';
+import Trips from './pages/Trips';
+import MapExplore from './pages/MapExplore';
+import Finances from './pages/Finances';
+import PhotoAlbum from './pages/PhotoAlbum';
 import LoginModal from './components/auth/LoginModal';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -36,7 +40,7 @@ const AppContent: React.FC = () => {
               path="/trips"
               element={
                 <ProtectedRoute>
-                  <NotFound />
+                  <Trips />
                 </ProtectedRoute>
               }
             />
@@ -44,7 +48,7 @@ const AppContent: React.FC = () => {
               path="/map"
               element={
                 <ProtectedRoute>
-                  <NotFound />
+                  <MapExplore />
                 </ProtectedRoute>
               }
             />
@@ -52,7 +56,7 @@ const AppContent: React.FC = () => {
               path="/finances"
               element={
                 <ProtectedRoute>
-                  <NotFound />
+                  <Finances />
                 </ProtectedRoute>
               }
             />
@@ -60,7 +64,7 @@ const AppContent: React.FC = () => {
               path="/album"
               element={
                 <ProtectedRoute>
-                  <NotFound />
+                  <PhotoAlbum />
                 </ProtectedRoute>
               }
             />
